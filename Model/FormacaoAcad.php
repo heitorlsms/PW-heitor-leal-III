@@ -85,13 +85,36 @@
                 $con = new ConexaoBD();
                 $conn = $con->conectar();
             
-            if ($conn->connect_error){
-                die("Connection failed: " .$conn->connect_error);
+                if ($conn->connect_error){
+                    die("Connection failed: " .$conn->connect_error);
                 }
 
-            $sql = "DELETE FROM formacaoAcademica WHERE idformacaoAcademica = '{$id}'";
+                $sql = "DELETE FROM formacaoAcademica WHERE idformacaoAcademica = '{$id}'";
 
-            if($conn->query
+                if($conn->query($sql) === true) {
+                    $conn->close();
+                    true;
+                }
+                else{
+                    $conn->close();
+                    return false;
+                }
+            }
+
+            //Listar formações
+            public function listaFormacoes($idusuario){
+                require_once 'ConexaoBD.php';
+                $con = new ConexaoBD();
+                $conn = $con->conectar();
+
+                if($conn->connect_error){
+                    die("COnnection failed: " . $conn->connect_error);
+                }
+
+                $sql = "SELECT * FROM formacaoAcademica WHERE idusuario = '{$idusuario}'";
+                $re = $conn->query($sql);
+                $conn->close();
+                return $re;
             }
         }
         
